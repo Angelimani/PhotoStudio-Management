@@ -1,0 +1,99 @@
+import os
+from docx import Document
+
+def add_code_to_word(doc, code, title="Code Snippet"):
+    """
+    Add a Python code snippet to the Word document with syntax highlighting.
+    """
+    doc.add_heading(title, level=2)
+    code_paragraph = doc.add_paragraph()
+    code_paragraph.add_run(code).font.name = 'Courier New'
+    doc.add_paragraph()  # Add an empty paragraph to separate code blocks
+
+def create_documentation(project_path, doc_path):
+    """
+    Create a Word documentation for a Python project.
+    """
+    # Create a new Document
+    doc = Document()
+
+    # Title Page
+    doc.add_heading('Python Project Documentation', 0)
+    doc.add_paragraph('Project Name: My Python Project')
+    doc.add_paragraph('Author: Your Name')
+    doc.add_paragraph('Date: December 2024')
+
+    doc.add_page_break()
+
+    # Table of Contents
+    doc.add_heading('Table of Contents', level=1)
+    doc.add_paragraph('1. Project Overview')
+    doc.add_paragraph('2. Installation Instructions')
+    doc.add_paragraph('3. Usage Instructions')
+    doc.add_paragraph('4. Code Explanation')
+    doc.add_paragraph('5. Conclusion')
+
+    doc.add_page_break()
+
+    # Project Overview
+    doc.add_heading('1. Project Overview', level=1)
+    doc.add_paragraph(
+        "This is a Python-based project that performs XYZ. "
+        "The purpose of this project is to solve ABC problems, providing users with an easy-to-use interface."
+    )
+
+    doc.add_page_break()
+
+    # Installation Instructions
+    doc.add_heading('2. Installation Instructions', level=1)
+    doc.add_paragraph(
+        "To install and run this project, follow these steps:"
+        "\n\n1. Clone the repository."
+        "\n2. Navigate to the project folder."
+        "\n3. Install the dependencies using pip:\n   pip install -r requirements.txt"
+        "\n4. Run the script using the command: python script_name.py"
+    )
+
+    doc.add_page_break()
+
+    # Usage Instructions
+    doc.add_heading('3. Usage Instructions', level=1)
+    doc.add_paragraph(
+        "To use this project, simply run the main Python script. Below is an example of how to use it:\n"
+        "python script_name.py"
+    )
+
+    doc.add_page_break()
+
+    # Add Code Snippets to the Document
+    doc.add_heading('4. Code Explanation', level=1)
+
+    # Example of adding Python code snippets
+    code_files = ['example_script.py', 'another_script.py']  # Add filenames you want to include
+    for file in code_files:
+        if os.path.exists(file):
+            with open(file, 'r') as f:
+                code = f.read()
+                add_code_to_word(doc, code, title=f"Code from {file}")
+
+    doc.add_page_break()
+
+    # Conclusion
+    doc.add_heading('5. Conclusion', level=1)
+    doc.add_paragraph(
+        "This project is designed to help users do XYZ. "
+        "Future improvements will include ABC and additional features."
+    )
+
+    # Save the Document
+    doc.save(doc_path)
+
+    print(f"Documentation saved as {doc_path}")
+
+# Path to your project directory
+project_directory = '/path/to/your/project'
+# Path where you want to save the generated Word document
+output_doc_path = 'project_documentation.docx'
+
+# Generate the documentation
+create_documentation(project_directory, output_doc_path)
